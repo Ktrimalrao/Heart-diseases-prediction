@@ -9,7 +9,7 @@ application = Flask(__name__)
 app=application
 
 scaler=pickle.load(open("/config/workspace/models/scaler.pkl", "rb"))
-model = pickle.load(open("/config/workspace/models/scaler.pkl", "rb"))
+model = pickle.load(open("/config/workspace/models/modelpredict.pkl", "rb"))
 
 ## Route for homepage
 
@@ -23,12 +23,11 @@ def predict_datapoint():
     result=""
 
     if request.method=='POST':
-        ## male,age,education,currentSmoker,cigsPerDay,BPMeds,prevalentStroke,prevalentHyp,diabetes,totChol,sysBP,diaBP,BMI,heartRate,glucose,TenYearCHD
+        ## male,age,currentSmoker,cigsPerDay,BPMeds,prevalentStroke,prevalentHyp,diabetes,totChol,sysBP,diaBP,BMI,heartRate,glucose,TenYearCHD
         male=int(request.form.get("male"))
         age = float(request.form.get('age'))
-        education = float(request.form.get('education'))
         currentSmoker = float(request.form.get('currentSmoker'))
-        cigsPereDay = float(request.form.get('cigsPerDay'))
+        cigsPerDay = float(request.form.get('cigsPerDay'))
         BPMeds = float(request.form.get('BPMeds'))
         prevalentStroke = float(request.form.get('prevalentStroke'))
         prevalentHyp = float(request.form.get('prevalentHyp'))
@@ -40,7 +39,7 @@ def predict_datapoint():
         heartRate = float(request.form.get('heartRate'))
         glucose = float(request.form.get('glucose'))
 
-        new_data=scaler.transform([[male,age,education,currentSmoker,cigsPerDay,BPMeds,prevalentStroke,prevalentHyp,diabetes,totChol,sysBP,diaBP,BMI,heartRate,glucose]])
+        new_data=scaler.transform([[male,age,currentSmoker,cigsPerDay,BPMeds,prevalentStroke,prevalentHyp,diabetes,totChol,sysBP,diaBP,BMI,heartRate,glucose]])
         predict=model.predict(new_data)
        
         if predict[0] ==1 :
